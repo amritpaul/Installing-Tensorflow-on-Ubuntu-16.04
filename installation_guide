@@ -1,0 +1,53 @@
+***NOTE***- Before following the steps given below, make sure "secure boot" is turned "off". You can turn off secure boot by booting into BIOS and creating a new "System Password" under security and navigating to "Boot options" and then turning off secure boot.
+
+I) Installing Nvidia Graphics Driver-
+
+Open a terminal and run the following 3 commands
+1. sudo add-apt-repository ppa:graphics-drivers/ppa
+2. sudo apt-get update
+3. sudo apt install nvidia-390
+
+Reboot your system. After rebooting your system, open a new terminal and type "nvidia-smi" to check whether Ubuntu detects the Nvidia Graphics Card.
+The output should show the GPU name and the driver.
+
+II) Installing CUDA 9.0-
+
+1. Go to https://developer.nvidia.com/cuda-90-download-archive and download the toolkit for linux, x86_64, ubuntu, 16.04, local (deb)
+2. Once the download is complete, open a terminal in the directory the base installer is and run the follow commands-
+    a) sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64.deb
+    b) sudo apt-key add /var/cuda-repo-9-0-local/7fa2af80.pub
+    c) sudo apt-get update
+    d) sudo apt-get install cuda
+3. If you see any patches, then do the following-
+    a) download patch 1 and install (open using software-install)
+    b) download patch 2 and install (open using software-install)
+    c) download patch 3 and install (open using software-install)
+    d) download patch 4 and install (open using software-install)
+4. Open a new terminal and type the following-
+    a) sudo gedit ~/.bashrc 
+    
+    go to the last line and add the following lines (this will set your PATH variable)
+    a) export PATH=/usr/local/cuda-9.0/bin${PATH:+:$PATH}}
+    b) export LD_LIBRARY_PATH=/usr/local/cuda-9.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+III) Installing CUDNN 7.0.5-
+
+1. Go to https://developer.nvidia.com/cudnn and select CUDNN 7.0.5 for CUDA 9.0. Download the cuDNN v7.0.5 Library for Linux (tar file).Open a terminal in the directory the tar file is located and unzip the tar file using the command
+    tar -xzvf cudnn-9.0-linux-x64-v7.tgz
+2. Run the following commands to move the appropriate files to the CUDA folder
+    a) sudo cp cuda/include/cudnn.h /usr/local/cuda/include
+    b) sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
+    c) sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*
+    d) navigate to /usr/local/cuda/lib64 and type the following commands-
+       a) sudo ln libcudnn.so.7.0.5 libcudnn.so.7
+       b) sudo ln libcudnn.so.7 libcudnn.so
+       c) sudo ldconfig
+
+IV) Installing Tensorflow-GPU 1.8.0-
+1. Open a new terminal and type the following-
+    sudo pip install tensorflow-gpu==1.8.0
+
+V) Installing Keras
+1. Open a terminal and type the following-
+    sudo pip install keras
+
